@@ -1,30 +1,44 @@
 package main
 
 import (
-	"os"
+	"fiber/api"
+	"fiber/config"
+	"fiber/infrastructure"
+	"fmt"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func getPort() string {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = ":3000"
-	} else {
-		port = ":" + port
-	}
+var cfg config.LocalConfig
 
-	return port
+func init() {
+	// config
+	config.InitConfig()
+	cfg = config.Config
+
+	// lineBot
+	infrastructure.InitLineBot()
+
+	// postgresql
+	infrastructure.InitDB()
 }
 
 func main() {
 	app := fiber.New()
+	api.InitAPI(app)
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"message": "Hello, Railway!",
-		})
-	})
+	addr := getAddress()
+	log.Printf("%v started at %v", cfg.Name, cfg.Port)
+	if err := app.Listen(addr); err != nil {
+		log.Fatal(err)
+	}
+}
 
-	app.Listen(getPort())
+func getAddress() string {
+	addr := ":8000"
+	if cfg.Port != "" {
+		addr = fmt.Sprintf(":%v", cfg.Port)
+	}
+	return addr
 }
