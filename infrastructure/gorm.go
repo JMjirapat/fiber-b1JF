@@ -36,8 +36,8 @@ func InitDB() {
 	)
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		DryRun: true,
-		Logger: &SQLlogger{},
+		// DryRun: true,
+		// Logger: &SQLlogger{},
 	})
 	if err != nil {
 		panic(err)
