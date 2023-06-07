@@ -6,6 +6,7 @@ import (
 	"fiber/infrastructure"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -13,6 +14,7 @@ import (
 var cfg config.LocalConfig
 
 func init() {
+	time.LoadLocation("Asia/Bangkok")
 	// config
 	config.InitConfig()
 	cfg = config.Config
