@@ -30,7 +30,7 @@ func (s scannerService) Verify(id int64) error {
 		return errors.New("QRCode Already Used")
 	}
 
-	if (*result.ExpireAt).Before(time.Now().UTC().Add(time.Hour * 7)) {
+	if (*result.ExpireAt).Before(time.Now()) {
 		return errors.New("QR Code Expired")
 	}
 	data := model.QRCodeTransaction{
