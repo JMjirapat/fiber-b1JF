@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"log"
 	"time"
 
 	"gitlab.com/qr-through/entry/backend/internal/core/domain"
@@ -28,11 +27,10 @@ func (s lineService) CreateQR(id int64, uid string) error {
 
 	account, err := s.accRepo.GetByLineId(uid)
 	if err != nil {
-		log.Panicf("%v",err)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("เกิดผิดพลาด: ไม่พบข้อมูลผู้ใช้ในระบบ, กรุณาลงทะเบียนก่อน")
 		}
-		return errors.New("เกิดข้อผิดพลาด: ไม่สามารถสร้าง QR Code ได้ (Internal Server Error).")
+		return errors.New("เกิดข้อผิดพลาด: ไม่สามารถสร้าง QR Code ได้ (Internal Server Error)")
 	}
 	qrcode := model.QRCodeTransaction{
 		ID:        id,
@@ -41,8 +39,7 @@ func (s lineService) CreateQR(id int64, uid string) error {
 	}
 
 	if err = s.qrRepo.Create(&qrcode); err != nil {
-		log.Panicf("%v",err)
-		return errors.New("เกิดข้อผิดพลาด: ไม่สามารถสร้าง QR Code ได้ (Internal Server Error).")
+		return errors.New("เกิดข้อผิดพลาด: ไม่สามารถสร้าง QR Code ได้ (Internal Server Error)")
 	}
 	return nil
 }
