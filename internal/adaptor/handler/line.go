@@ -48,16 +48,18 @@ func (h lineHandler) Webhook(c *fiber.Ctx) error {
 					if err != nil {
 						errMsg := "เกิดข้อผิดพลาด: ไม่สามารถแปลง message ID เป็น Integer ได้ (Bad Request)."
 						if _, err = infrastructure.LineBot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(errMsg)).Do(); err != nil {
-							log.Panic(err)
+							log.Panicf("%v",err)
 						}
-						break
+						//ถ้าถึงจุดนี้ให้หยุดและไป process event อันใหม่
+						continue
 					}
 
 					if err = h.serv.CreateQR(messageId, event.Source.UserID); err != nil {
 						if _, err = infrastructure.LineBot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(err.Error())).Do(); err != nil {
-							log.Panic(err)
+							log.Panicf("%v",err)
 						}
-						break
+						//ถ้าถึงจุดนี้ให้หยุดและไป process event อันใหม่
+						continue
 					}
 
 					qrCode := linebot.NewImageMessage(qrString, qrString)
