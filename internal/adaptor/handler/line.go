@@ -46,17 +46,16 @@ func (h lineHandler) Webhook(c *fiber.Ctx) error {
 					// Handle text messages
 					messageId, err := strconv.ParseInt(message.ID, 10, 64)
 					if err != nil {
-						log.Panic(err)
 						errMsg := "เกิดข้อผิดพลาด: ไม่สามารถแปลง message ID เป็น Integer ได้ (Bad Request)."
 						if _, err = infrastructure.LineBot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(errMsg)).Do(); err != nil {
-							log.Println(err)
+							log.Panic(err)
 						}
 						break
 					}
 
 					if err = h.serv.CreateQR(messageId, event.Source.UserID); err != nil {
 						if _, err = infrastructure.LineBot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(err.Error())).Do(); err != nil {
-							log.Println(err)
+							log.Panic(err)
 						}
 						break
 					}
