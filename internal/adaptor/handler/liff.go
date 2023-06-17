@@ -60,6 +60,10 @@ func (h liffHandler) SignUp(c *fiber.Ctx) error {
 		return util.ResponseError(c, errors.NewStatusBadGatewayError("เกิดข้อผิดพลาดกับการติดต่อบริการของ Line"))
 	}
 
+	if len(res.Sub) == 0 {
+		return util.ResponseError(c, errors.NewStatusBadGatewayError("เกิดข้อผิดพลาดกับการติดต่อบริการของ Line"))
+	}
+
 	if err := h.serv.SignUp(body, res.Sub); err != nil {
 		return util.ResponseError(c, errors.NewInternalError(err.Error()))
 	}
