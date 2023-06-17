@@ -1,11 +1,11 @@
 package port
 
-import "fiber/internal/core/model"
+import "gitlab.com/qr-through/entry/backend/internal/core/model"
 
 type UserRepo interface {
-	Create(body *model.User) error
+	Create(*model.User) error
 	GetById(id int) (*model.User, error)
 	All() ([]model.User, error)
-	UpdateById(id int, body *model.User) error
+	UpdateById(id int, user *model.User) error
 	DeleteById(id int) error
 }

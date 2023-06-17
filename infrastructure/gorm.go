@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"fiber/config"
-
+	"gitlab.com/qr-through/entry/backend/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -36,8 +35,8 @@ func InitDB() {
 	)
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		// DryRun: true,
-		// Logger: &SQLlogger{},
+		//DryRun: true,
+		//Logger: &SQLlogger{},
 	})
 	if err != nil {
 		panic(err)

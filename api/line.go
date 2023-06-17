@@ -1,13 +1,11 @@
 package api
 
 import (
-	"fiber/internal/adaptor/handler"
-	"fiber/internal/adaptor/repo"
-	"fiber/internal/core/service"
-
-	"fiber/infrastructure"
-
 	"github.com/gofiber/fiber/v2"
+	"gitlab.com/qr-through/entry/backend/infrastructure"
+	"gitlab.com/qr-through/entry/backend/internal/adaptor/handler"
+	"gitlab.com/qr-through/entry/backend/internal/adaptor/repo"
+	"gitlab.com/qr-through/entry/backend/internal/core/service"
 )
 
 const LINE_PREFIX = "/line"
@@ -17,17 +15,8 @@ func bindLineBotRouter(router fiber.Router) {
 
 	qrRepo := repo.NewQRCodeRepo(infrastructure.DB)
 	accRepo := repo.NewAccountRepo(infrastructure.DB)
-	userRepo := repo.NewUserRepo(infrastructure.DB)
-	alumniRepo := repo.NewAlumniRepo(infrastructure.DB)
-	serv := service.NewLineService(qrRepo, accRepo, userRepo, alumniRepo)
+	serv := service.NewLineService(qrRepo, accRepo)
 	hdl := handler.NewLineHandler(serv)
 
-	lineRouter.Get("", func(c *fiber.Ctx) error {
-		return c.Status(200).JSON(fiber.Map{
-			"success": true,
-		})
-	})
 	lineRouter.Post("/webhook", hdl.Webhook)
-	lineRouter.Get("/user/check/:id", hdl.GetById)
-	lineRouter.Post("/user/register", hdl.Register)
 }

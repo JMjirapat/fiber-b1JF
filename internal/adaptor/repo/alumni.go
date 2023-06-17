@@ -1,11 +1,9 @@
 package repo
 
 import (
-	"fiber/internal/core/model"
-	"fiber/internal/core/port"
-
+	"gitlab.com/qr-through/entry/backend/internal/core/model"
+	"gitlab.com/qr-through/entry/backend/internal/core/port"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type alumniRepo struct {
@@ -18,14 +16,19 @@ func NewAlumniRepo(db *gorm.DB) port.AlumniRepo {
 	}
 }
 
-func (r alumniRepo) GetById(id int) (*model.Alumni, error) {
-	var result model.Alumni
+func (r alumniRepo) Create(alumni *model.Alumni) error {
+	return r.db.Create(alumni).Error
+}
 
-	if err := r.db.
-		Preload(clause.Associations).
-		Take(&result, "id=?", id).Error; err != nil {
+func (r alumniRepo) GetById(id int) (*model.Alumni, error) {
+	var alumni model.Alumni
+	if err := r.db.Take(&alumni, "id=?", id).Error; err != nil {
 		return nil, err
 	}
 
-	return &result, nil
+	return &alumni, nil
+}
+
+func (r alumniRepo) UpdateById(id int, alumni model.Alumni) error {
+	return r.db.Where("id=?", id).Updates(&alumni).Error
 }

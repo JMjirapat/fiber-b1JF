@@ -1,7 +1,9 @@
 package port
 
-import "fiber/internal/core/model"
+import "gitlab.com/qr-through/entry/backend/internal/core/model"
 
 type LogRepo interface {
-	Create(body *model.UsageLog) error
+	Create(*model.UsageLog) error
+	All() ([]model.UsageLog, error)
+	DeleteById(id int) error
 }

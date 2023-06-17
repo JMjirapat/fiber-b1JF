@@ -1,10 +1,10 @@
 package repo
 
 import (
-	"fiber/internal/core/model"
-	"fiber/internal/core/port"
-
+	"gitlab.com/qr-through/entry/backend/internal/core/model"
+	"gitlab.com/qr-through/entry/backend/internal/core/port"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type userRepo struct {
@@ -22,17 +22,25 @@ func (r userRepo) Create(body *model.User) error {
 }
 
 func (r userRepo) GetById(id int) (*model.User, error) {
-	return nil, nil
+	var user model.User
+	if err := r.db.Preload(clause.Associations).Take(&user, "id=?", id).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (r userRepo) All() ([]model.User, error) {
-	return nil, nil
+	var users []model.User
+	if err := r.db.Preload(clause.Associations).Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
-func (r userRepo) UpdateById(id int, body *model.User) error {
-	return nil
+func (r userRepo) UpdateById(id int, user *model.User) error {
+	return r.db.Where("id=?", id).Updates(&user).Error
 }
 
 func (r userRepo) DeleteById(id int) error {
-	return nil
+	return r.db.Where("id=?", id).Delete(&model.User{}).Error
 }

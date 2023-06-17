@@ -1,11 +1,9 @@
 package repo
 
 import (
-	"fiber/internal/core/model"
-	"fiber/internal/core/port"
-
+	"gitlab.com/qr-through/entry/backend/internal/core/model"
+	"gitlab.com/qr-through/entry/backend/internal/core/port"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type accountRepo struct {
@@ -19,35 +17,41 @@ func NewAccountRepo(db *gorm.DB) port.AccountRepo {
 }
 
 func (r accountRepo) Create(body *model.Account) (*int, error) {
-	if err := r.db.Create(&body).Error; err != nil {
+	if err := r.db.Create(body).Error; err != nil {
 		return nil, err
 	}
 	return &body.ID, nil
 }
 
 func (r accountRepo) GetById(id int) (*model.Account, error) {
-	return nil, nil
+	var account model.Account
+	if err := r.db.Take(&account, "id=?", id).Error; err != nil {
+		return nil, err
+	}
+	return &account, nil
 }
 
 func (r accountRepo) GetByLineId(uid string) (*model.Account, error) {
-	var result model.Account
-	if err := r.db.
-		Preload(clause.Associations).
-		Take(&result, "line_id=?", uid).Error; err != nil {
+	var account model.Account
+	if err := r.db.Take(&account, "line_id=?", uid).Error; err != nil {
 		return nil, err
 	}
 
-	return &result, nil
+	return &account, nil
 }
 
 func (r accountRepo) All() ([]model.Account, error) {
-	return nil, nil
+	var accounts []model.Account
+	if err := r.db.Find(&accounts).Error; err != nil {
+		return nil, err
+	}
+	return accounts, nil
 }
 
-func (r accountRepo) UpdateById(id int, body *model.Account) error {
-	return nil
+func (r accountRepo) UpdateById(id int, account *model.Account) error {
+	return r.db.Where("id=?", id).Updates(&account).Error
 }
 
 func (r accountRepo) DeleteById(id int) error {
-	return nil
+	return r.db.Where("id=?", id).Delete(&model.Account{}).Error
 }

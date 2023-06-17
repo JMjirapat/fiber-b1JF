@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fiber/api"
-	"fiber/config"
-	"fiber/infrastructure"
 	"fmt"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"gitlab.com/qr-through/entry/backend/api"
+	"gitlab.com/qr-through/entry/backend/config"
+	"gitlab.com/qr-through/entry/backend/infrastructure"
 )
 
 var cfg config.LocalConfig

@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fiber/config"
-	"fiber/infrastructure"
-	"fiber/internal/core/model"
 	"log"
+
+	"gitlab.com/qr-through/entry/backend/config"
+	"gitlab.com/qr-through/entry/backend/infrastructure"
+	"gitlab.com/qr-through/entry/backend/internal/core/model"
 )
 
 func init() {
@@ -16,8 +17,9 @@ func main() {
 	if err := infrastructure.DB.Migrator().AutoMigrate(
 		model.Account{},
 		model.Alumni{},
+		model.Alumni_new{},
 		model.Moderator{},
-		model.OTPTranstaction{},
+		model.OTPTransaction{},
 		model.QRCodeTransaction{},
 		model.UsageLog{},
 		model.User{}); err != nil {

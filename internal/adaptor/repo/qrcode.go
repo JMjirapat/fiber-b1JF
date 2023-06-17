@@ -1,9 +1,8 @@
 package repo
 
 import (
-	"fiber/internal/core/model"
-	"fiber/internal/core/port"
-
+	"gitlab.com/qr-through/entry/backend/internal/core/model"
+	"gitlab.com/qr-through/entry/backend/internal/core/port"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -23,27 +22,28 @@ func (r qrCodeRepo) Create(body *model.QRCodeTransaction) error {
 }
 
 func (r qrCodeRepo) All() ([]model.QRCodeTransaction, error) {
-	return nil, nil
+	var qrcodes []model.QRCodeTransaction
+	if err := r.db.Preload(clause.Associations).Find(&qrcodes).Error; err != nil {
+		return nil, err
+	}
+	return qrcodes, nil
 }
 
 func (r qrCodeRepo) GetById(id int64) (*model.QRCodeTransaction, error) {
-	var result model.QRCodeTransaction
+	var qrcode model.QRCodeTransaction
 	if err := r.db.
 		Preload(clause.Associations).
-		Take(&result, "id=?", id).Error; err != nil {
+		Take(&qrcode, "id=?", id).Error; err != nil {
 		return nil, err
 	}
 
-	return &result, nil
+	return &qrcode, nil
 }
 
-func (r qrCodeRepo) UpdateById(id int64, body *model.QRCodeTransaction) error {
-	if err := r.db.Model(&model.QRCodeTransaction{}).Where("id = ?", id).Omit("id").Updates(body).Error; err != nil {
-		return err
-	}
-	return nil
+func (r qrCodeRepo) UpdateById(id int64, qrcode *model.QRCodeTransaction) error {
+	return r.db.Model(&model.QRCodeTransaction{}).Where("id = ?", id).Updates(&qrcode).Error
 }
 
 func (r qrCodeRepo) DeleteById(id int64) error {
-	return nil
+	return r.db.Where("id=?", id).Delete(&model.QRCodeTransaction{}).Error
 }

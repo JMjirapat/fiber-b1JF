@@ -1,13 +1,11 @@
 package api
 
 import (
-	"fiber/internal/adaptor/handler"
-	"fiber/internal/adaptor/repo"
-	"fiber/internal/core/service"
-
-	"fiber/infrastructure"
-
 	"github.com/gofiber/fiber/v2"
+	"gitlab.com/qr-through/entry/backend/infrastructure"
+	"gitlab.com/qr-through/entry/backend/internal/adaptor/handler"
+	"gitlab.com/qr-through/entry/backend/internal/adaptor/repo"
+	"gitlab.com/qr-through/entry/backend/internal/core/service"
 )
 
 const DEVICE_PREFIX = "/device"

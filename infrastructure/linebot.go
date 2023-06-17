@@ -1,9 +1,8 @@
 package infrastructure
 
 import (
-	"fiber/config"
-
 	"github.com/line/line-bot-sdk-go/linebot"
+	"gitlab.com/qr-through/entry/backend/config"
 )
 
 var LineBot *linebot.Client
