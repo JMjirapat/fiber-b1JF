@@ -13,7 +13,7 @@ dbcreate:
 dbmigrate:
 	migrate -database postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_NAME)?sslmode=disable -path ./db/migrations up
 dbrollback:
-	migrate -database postgres://root:arnan1234@localhost:5433/qrthrough?sslmode=disable -path ./db/migrations down
+	migrate -database postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_NAME)?sslmode=disable -path ./db/migrations down
 
 dbscript:
 	go run ./cmd/automigrate/
