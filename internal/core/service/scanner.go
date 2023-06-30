@@ -34,7 +34,9 @@ func (s scannerService) Verify(id int64) error {
 	}
 
 	if (*result.ExpireAt).Before(time.Now().UTC().Add(time.Hour * 7)) {
-		log.Printf("%v", "qrcode expired")
+		log.Printf("%v", time.Now().UTC().Add(time.Hour*7))
+		log.Printf("%v", time.Now().Add(time.Hour*7))
+		log.Printf("%v", time.Now())
 		return errors.New("qrcode expired")
 	}
 
