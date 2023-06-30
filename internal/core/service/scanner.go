@@ -26,6 +26,7 @@ func NewScannerService(qrRepo port.QRCodeRepo, logRepo port.LogRepo) domain.Scan
 func (s scannerService) Verify(id int64) error {
 	result, err := s.qrRepo.GetById(id)
 	if err != nil {
+		log.Printf("%v", err)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("qrcode not found")
 		}
@@ -33,6 +34,7 @@ func (s scannerService) Verify(id int64) error {
 	}
 
 	if (*result.ExpireAt).Before(time.Now().UTC().Add(time.Hour * 7)) {
+		log.Printf("%v", "qrcode expired")
 		return errors.New("qrcode expired")
 	}
 
